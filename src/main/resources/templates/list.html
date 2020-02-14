@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="search" method="post">
+    <table border="1">
+        <tr><input type="text" name="name" id="name"/><button>查询</button></tr>
+        <tr>
+            <td colspan="5"></td>
+            <td>
+                <a th:href="@{new}" th:text="新增"></a>
+            </td>
+        </tr>
+        <tr>
+            <th>id</th>
+            <th>姓名</th>
+            <th>生日</th>
+            <th>电话</th>
+            <th>地址</th>
+            <th>操作</th>
+        </tr>
+
+        <tr th:each="u:${user}">
+            <td th:text="${u[id]}"></td>
+            <td th:text="${u[userName]}"></td>
+            <td th:text="${u[birthday]}"></td>
+            <td th:text="${u[phone]}"></td>
+            <td th:text="${u[address]}"></td>
+            <td><a href="#" class="delete" th:attr="did=${u.id}">删除</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+<script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js}"></script>
+<script th:inline="javascript">
+$(function () {
+    $(".delete").click(function () {
+        var o = $(this);
+        var id = o.attr("did");
+        $.ajax({
+            url:"delete/"+id,
+            dataType:"json",
+            success:function (count) {
+                if (count>0){
+                    o.parent().parent().remove();
+                }
+            }
+        })
+    })
+})
+</script>
